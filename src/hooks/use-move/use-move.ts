@@ -8,21 +8,23 @@ interface UseMoveOptions {
 export const useMove = ({constrainToBounds = false, disabled = false}: UseMoveOptions = {}) => {
   const ref = useRef<HTMLDivElement | null>(null)
   const delta = useRef({dx: 0, dy: 0})
-
   const down = (e: React.MouseEvent) => {
     if (disabled) return
 
+    delta.current.dx = ref.current?.getBoundingClientRect().left || 0
+    delta.current.dy = ref.current?.getBoundingClientRect().top || 0
+
     const startPos = {
-      x: e.clientX - delta.current.dx,
-      y: e.clientY - delta.current.dy,
+      x: e.pageX - delta.current.dx,
+      y: e.pageY - delta.current.dy,
     }
 
     const handleMouseMove = (e: MouseEvent) => {
       const parentBounds = ref.current?.parentElement?.getBoundingClientRect()
       const elementBounds = ref.current?.getBoundingClientRect()
 
-      let dx = e.clientX - startPos.x
-      let dy = e.clientY - startPos.y
+      let dx = e.pageX - startPos.x
+      let dy = e.pageY - startPos.y
 
       if (constrainToBounds && parentBounds && elementBounds) {
         dx = Math.min(parentBounds.width - elementBounds.width, Math.max(dx, 0))
