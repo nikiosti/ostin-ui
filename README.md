@@ -3,7 +3,6 @@
 ### Hooks:
 - use-move
 - use-resizable
-- use-resizable-move
 
 
 ### Components
