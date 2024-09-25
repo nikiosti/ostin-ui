@@ -1,0 +1,8 @@
+.image {
+  background-size: cover;
+  width: inherit;
+  height: inherit;
+
+  object-fit: cover;
+  display: block;
+}

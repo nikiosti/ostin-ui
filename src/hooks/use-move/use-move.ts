@@ -15,8 +15,8 @@ export const useMove = ({constrainToBounds = false, disabled = false}: UseMoveOp
     delta.current.dy = ref.current?.getBoundingClientRect().top || 0
 
     const startPos = {
-      x: e.pageX - delta.current.dx,
-      y: e.pageY - delta.current.dy,
+      x: e.clientX - delta.current.dx,
+      y: e.clientY - delta.current.dy,
     }
 
     const handleMouseMove = (e: MouseEvent) => {

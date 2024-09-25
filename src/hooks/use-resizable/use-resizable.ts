@@ -1,7 +1,7 @@
 import {useRef} from 'react'
 import {CustomUpdateSize, CustomUpdateSizeParams} from '../../ui/TextResizable'
 
-type ResizeDirection = 'right' | 'bottom' | 'left' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+type ResizeDirection = 'right' | 'bottom' | 'left' | 'top' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
 interface Size {
   width: number
@@ -14,6 +14,7 @@ interface UseResizableParams {
   customUpdateSize?: CustomUpdateSize
   onUp?: () => void
   onMove?: () => void
+  onDown?: () => void
 }
 
 interface UseResizableResult {
@@ -21,7 +22,7 @@ interface UseResizableResult {
   down: (e: React.MouseEvent, direction: ResizeDirection) => void
 }
 
-export const useResizable = ({customUpdateSize, onUp, onMove}: UseResizableParams): UseResizableResult => {
+export const useResizable = ({customUpdateSize, onUp, onMove, onDown}: UseResizableParams): UseResizableResult => {
   const ref = useRef<HTMLDivElement | null>(null)
   const size = useRef<Size>({
     width: 100,
@@ -78,6 +79,15 @@ export const useResizable = ({customUpdateSize, onUp, onMove}: UseResizableParam
           if (newWidth < 0) {
             newWidth = 0
             newLeft = initialLeft + initialWidth
+          }
+          break
+
+        case 'top':
+          newHeight = initialHeight - deltaY
+          newTop = initialTop + deltaY
+          if (newHeight < 0) {
+            newHeight = 0
+            newTop = initialTop + initialHeight
           }
           break
         case 'top-left':
@@ -140,6 +150,7 @@ export const useResizable = ({customUpdateSize, onUp, onMove}: UseResizableParam
   const down = (e: React.MouseEvent, direction: ResizeDirection) => {
     e.preventDefault()
     e.stopPropagation()
+    onDown && onDown()
     handleResize(e.nativeEvent, direction)
   }
 

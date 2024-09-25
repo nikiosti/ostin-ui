@@ -1,0 +1,63 @@
+.move {
+  position: absolute;
+}
+
+.resizable {
+  border: 3px solid #18a0fb;
+  position: absolute;
+  height: fit-content;
+  z-index: 4;
+}
+.resizer {
+  position: absolute;
+
+  z-index: 3;
+}
+
+.left {
+  left: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.top {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.right {
+  right: -12px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.bottomLeft {
+  bottom: 0;
+  left: 0;
+  transform: translate(-50%, 50%);
+}
+
+.topLeft {
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.bottomRight {
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+}
+
+.topRight {
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
