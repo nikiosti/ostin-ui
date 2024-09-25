@@ -25,9 +25,9 @@ interface UseResizableResult {
 export const useResizable = ({customUpdateSize, onUp, onMove, onDown}: UseResizableParams): UseResizableResult => {
   const ref = useRef<HTMLDivElement | null>(null)
   const size = useRef<Size>({
-    width: 100,
+    width: ref.current?.getBoundingClientRect().width || 100,
     height: 100,
-    startX: 100,
+    startX: ref.current?.getBoundingClientRect().left || 100,
     startY: 100,
   })
 
@@ -56,7 +56,7 @@ export const useResizable = ({customUpdateSize, onUp, onMove, onDown}: UseResiza
     const move = (moveEvent: MouseEvent) => {
       onMove && onMove()
 
-      const deltaX = moveEvent.pageX - startX
+      const deltaX = moveEvent.pageX - startX 
       const deltaY = moveEvent.pageY - startY
 
       let newWidth = initialWidth

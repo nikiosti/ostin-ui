@@ -3,7 +3,7 @@
 }
 
 .resizable {
-  border: 1px solid rgb(32, 32, 225);
+  border: 3px solid #18a0fb;
   position: absolute;
   height: fit-content;
 }
@@ -11,7 +11,7 @@
   position: absolute;
   width: 5px;
   height: 30px;
-  background-color: rgb(36, 76, 255);
+  background-color: #18a0fb;
   border-radius: 100px;
 }
 

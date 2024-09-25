@@ -3,7 +3,9 @@
 }
 
 .resizable {
-  border: 3px solid #18a0fb;
+  box-sizing: border-box;
+  outline: 1px solid;
+  outline-color: tomato;
   position: absolute;
   height: fit-content;
   z-index: 4;
