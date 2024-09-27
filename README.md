@@ -1,17 +1,6 @@
 # Ostin UI
-## Free Effects and rerenders
+## Free Effects and without unnecessary rerenders
 ### Hooks:
 - use-move
 - use-resizable
-
-
-### Components
----
-#### Resizable
-- Resizable
-- ImageResizable
-- TextResizable
-####  Move
-- Move
-#### Image
-- Image
+- use-rotate
