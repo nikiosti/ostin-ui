@@ -2,6 +2,9 @@
   position: absolute;
   transform-origin: top left;
   user-select: none;
+
+  left: 50%;
+  top: 200px;
 }
 
 .box-wrapper {
@@ -28,55 +31,46 @@
 .dot.left-top {
   top: -5px;
   left: -5px;
-  /* cursor: nw-resize; */
 }
 
 .dot.left-bottom {
   bottom: -5px;
   left: -5px;
-  /* cursor: sw-resize; */
 }
 
 .dot.right-top {
   top: -5px;
   right: -5px;
-  /* cursor: ne-resize; */
 }
 
 .dot.right-bottom {
   bottom: -5px;
   right: -5px;
-  /* cursor: se-resize; */
 }
 
 .dot.top-mid {
   top: -5px;
   left: calc(50% - 5px);
-  /* cursor: n-resize; */
 }
 
 .dot.left-mid {
   left: -5px;
   top: calc(50% - 5px);
-  /* cursor: w-resize; */
 }
 
 .dot.right-mid {
   right: -5px;
   top: calc(50% - 5px);
-  /* cursor: e-resize; */
 }
 
 .dot.bottom-mid {
   bottom: -5px;
   left: calc(50% - 5px);
-  /* cursor: s-resize; */
 }
 
 .dot.rotate {
   top: -30px;
   left: calc(50% - 5px);
-  cursor: url('https://findicons.com/files/icons/1620/crystal_project/16/rotate_ccw.png'), auto;
 }
 
 .rotate-link {

@@ -8,7 +8,6 @@ const App = () => {
   return (
     <div
       className="box"
-      id="box"
       ref={(el) => {
         refResize.current = el
         refMove.current = el
