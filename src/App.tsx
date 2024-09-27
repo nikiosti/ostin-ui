@@ -1,16 +1,40 @@
-import {Image, Resizable} from './ui'
-
+import {Image} from './ui'
+import {useMove, useResizable, useRotate} from './hooks'
+import './App.css'
 const App = () => {
+  const {ref: refMove, down: downMove} = useMove()
+  const {ref: refRotate, refWrapper: refWrapperRotate, down: downRotate} = useRotate()
+  const {ref: refResize, refWrapper: refWrapperResize, down: downResize} = useResizable()
   return (
-    <div>
-     
-      <Resizable>
-        <Image url="https://upload.wikimedia.org/wikipedia/commons/9/99/Pavel_Durov_sitting_portrait.jpg" />
-      </Resizable>
-      <Resizable>
-        <Image url="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/240px-American_Beaver.jpg" />
-      </Resizable>
-     
+    <div
+      className="box"
+      id="box"
+      ref={(el) => {
+        refResize.current = el
+        refMove.current = el
+        refRotate.current = el
+      }}
+      onMouseDown={downMove}
+    >
+      <div
+        className="box-wrapper"
+        ref={(el) => {
+          refWrapperResize.current = el
+          refWrapperRotate.current = el
+        }}
+      >
+        <Image url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmCy16nhIbV3pI1qLYHMJKwbH2458oiC9EmA&s" />
+        <div className="dot rotate" onMouseDown={downRotate}></div>
+        <div className="dot left-top" onMouseDown={(e) => downResize(e, 'top-left')}></div>
+        <div className="dot left-bottom" onMouseDown={(e) => downResize(e, 'bottom-left')}></div>
+        <div className="dot top-mid" onMouseDown={(e) => downResize(e, 'top')}></div>
+        <div className="dot bottom-mid" onMouseDown={(e) => downResize(e, 'bottom')}></div>
+        <div className="dot left-mid" onMouseDown={(e) => downResize(e, 'left')}></div>
+        <div className="dot right-mid" onMouseDown={(e) => downResize(e, 'right')}></div>
+        <div className="dot right-bottom" onMouseDown={(e) => downResize(e, 'bottom-right')}></div>
+        <div className="dot right-top" onMouseDown={(e) => downResize(e, 'top-right')}></div>
+        <div className="rotate-link"></div>
+      </div>
     </div>
   )
 }

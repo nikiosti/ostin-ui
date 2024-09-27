@@ -1,52 +1,31 @@
-import React, {useRef} from 'react'
+import { useRef } from "react"
 
-interface UseMoveOptions {
-  constrainToBounds?: boolean
-  disabled?: boolean
-}
-
-export const useMove = ({constrainToBounds = false, disabled = false}: UseMoveOptions = {}) => {
+export const useMove = () => {
   const ref = useRef<HTMLDivElement | null>(null)
-  const delta = useRef({dx: 0, dy: 0})
+
   const down = (e: React.MouseEvent) => {
-    if (disabled) return
+    const target = e.target as HTMLDivElement
+    if (target.className.indexOf('dot') > -1) return
 
-    delta.current.dx = ref.current?.getBoundingClientRect().left || 0
-    delta.current.dy = ref.current?.getBoundingClientRect().top || 0
+    const offsetLeft = ref.current?.offsetLeft!
+    const offsetTop = ref.current?.offsetTop!
+    const pressX = e.clientX
+    const pressY = e.clientY
 
-    const startPos = {
-      x: e.clientX - delta.current.dx,
-      y: e.clientY - delta.current.dy,
+    const move = (e: MouseEvent) => {
+      if (!ref.current) return
+      const style = ref.current.style
+      style.left = offsetLeft + (e.clientX - pressX) + 'px'
+      style.top = offsetTop + (e.clientY - pressY) + 'px'
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const parentBounds = ref.current?.parentElement?.getBoundingClientRect()
-      const elementBounds = ref.current?.getBoundingClientRect()
-      
-      let dx = e.pageX - startPos.x
-      let dy = e.pageY - startPos.y
-
-      if (constrainToBounds && parentBounds && elementBounds) {
-        dx = Math.min(parentBounds.width - elementBounds.width, Math.max(dx, 0))
-        dy = Math.min(parentBounds.height - elementBounds.height, Math.max(dy, 0))
-      }
-
-      delta.current = {dx, dy}
-
-      if (ref.current) {
-        ref.current.style.left = `${delta.current.dx}px`
-        ref.current.style.top = `${delta.current.dy}px`
-      }
+    const up = () => {
+      document.removeEventListener('mousemove', move)
+      document.removeEventListener('mouseup', up)
     }
 
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('mousemove', move)
+    document.addEventListener('mouseup', up)
   }
-
-  return {ref, down} as const
+  return {ref, down}
 }

@@ -1,158 +1,199 @@
 import {useRef} from 'react'
-import {CustomUpdateSize, CustomUpdateSizeParams} from '../../ui/TextResizable'
 
 type ResizeDirection = 'right' | 'bottom' | 'left' | 'top' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 
-interface Size {
-  width: number
-  height: number
-  startX: number
-  startY: number
-}
+export const useResizable = () => {
+  const minWidth = 0
+  const minHeight = 0
+  const getCurrentRotation = (el: HTMLDivElement) => {
+    const computedStyle = window.getComputedStyle(el, null)
+    const transformValue = getTransformValue(computedStyle)
 
-interface UseResizableParams {
-  customUpdateSize?: CustomUpdateSize
-  onUp?: () => void
-  onMove?: () => void
-  onDown?: () => void
-}
-
-interface UseResizableResult {
-  ref: React.MutableRefObject<HTMLDivElement | null>
-  down: (e: React.MouseEvent, direction: ResizeDirection) => void
-}
-
-export const useResizable = ({customUpdateSize, onUp, onMove, onDown}: UseResizableParams): UseResizableResult => {
-  const ref = useRef<HTMLDivElement | null>(null)
-  const size = useRef<Size>({
-    width: ref.current?.getBoundingClientRect().width || 100,
-    height: 100,
-    startX: ref.current?.getBoundingClientRect().left || 100,
-    startY: 100,
-  })
-
-  const defaultUpdateSize = ({width, height, startX, startY}: CustomUpdateSizeParams) => {
-    size.current = {width, height, startX, startY}
-    if (ref.current) {
-      ref.current.style.width = `${width}px`
-      ref.current.style.height = `${height}px`
-      ref.current.style.left = `${startX}px`
-      ref.current.style.top = `${startY}px`
+    if (transformValue !== 'none') {
+      const [x, y] = getTransformValues(transformValue)
+      const angle = calculateRotationAngle(x, y)
+      return normalizeAngle(angle)
     }
+
+    return 0
   }
 
-  const updateSize = customUpdateSize || defaultUpdateSize
+  const getTransformValue = (computedStyle: CSSStyleDeclaration) => {
+    return (
+      computedStyle.getPropertyValue('-webkit-transform') ||
+      computedStyle.getPropertyValue('-moz-transform') ||
+      computedStyle.getPropertyValue('-ms-transform') ||
+      computedStyle.getPropertyValue('-o-transform') ||
+      computedStyle.getPropertyValue('transform')
+    )
+  }
 
-  const handleResize = (e: MouseEvent, direction: ResizeDirection) => {
-    if (!ref.current) return
-    const startX = e.pageX
-    const startY = e.pageY
+  const getTransformValues = (transformValue: string) => {
+    const values = transformValue.split('(')[1].split(')')[0].split(',')
+    return [parseFloat(values[0]), parseFloat(values[1])]
+  }
 
-    const initialWidth = ref.current.offsetWidth
-    const initialHeight = ref.current.offsetHeight
-    const initialLeft = ref.current.offsetLeft
-    const initialTop = ref.current.offsetTop
+  const calculateRotationAngle = (x: number, y: number) => {
+    return Math.round(Math.atan2(y, x) * (180 / Math.PI))
+  }
 
-    const move = (moveEvent: MouseEvent) => {
-      onMove && onMove()
+  const normalizeAngle = (angle: number) => {
+    return angle < 0 ? angle + 360 : angle
+  }
 
-      const deltaX = moveEvent.pageX - startX 
-      const deltaY = moveEvent.pageY - startY
+  const ref = useRef<HTMLDivElement | null>(null)
+  const refWrapper = useRef<HTMLDivElement | null>(null)
+  const down = (e: React.MouseEvent, direction: ResizeDirection) => {
+    e.stopPropagation()
+    const offsetLeft = ref.current?.offsetLeft!
+    const offsetTop = ref.current?.offsetTop!
+    const offsetWidth = refWrapper.current?.offsetWidth!
+    const offsetHeight = refWrapper.current?.offsetHeight!
+    const pressX = e.clientX
+    const pressY = e.clientY
 
-      let newWidth = initialWidth
-      let newHeight = initialHeight
-      let newLeft = initialLeft
-      let newTop = initialTop
+    const initRotate = getCurrentRotation(ref.current!)
+    const initRadians = (initRotate * Math.PI) / 180
+    const cosFraction = Math.cos(initRadians)
+    const sinFraction = Math.sin(initRadians)
+    const move = (e: MouseEvent) => {
+      const diffX = e.clientX - pressX
+      const diffY = e.clientY - pressY
 
+      let diffXRotated = cosFraction * diffX + sinFraction * diffY
+      let diffYRotated = cosFraction * diffY - sinFraction * diffX
+      let newW = offsetWidth,
+        newH = offsetHeight,
+        newX = offsetLeft,
+        newY = offsetTop
       switch (direction) {
         case 'right':
-          newWidth = initialWidth + deltaX
-          if (newWidth < 0) newWidth = 0
+          newW = offsetWidth + diffXRotated
+          if (newW < minWidth) {
+            newW = minWidth
+            diffXRotated = minWidth - offsetWidth
+          }
+          newX += 0.5 * diffXRotated * cosFraction
+          newY += 0.5 * diffXRotated * sinFraction
           break
         case 'bottom':
-          newHeight = initialHeight + deltaY
-          if (newHeight < 0) newHeight = 0
+          newH = offsetHeight + diffYRotated
+          if (newH < minHeight) {
+            newH = minHeight
+            diffYRotated = minHeight - offsetHeight
+          }
+          newX -= 0.5 * diffYRotated * sinFraction
+          newY += 0.5 * diffYRotated * cosFraction
           break
         case 'left':
-          newWidth = initialWidth - deltaX
-          newLeft = initialLeft + deltaX
-          if (newWidth < 0) {
-            newWidth = 0
-            newLeft = initialLeft + initialWidth
+          newW = offsetWidth - diffXRotated
+          if (newW < minWidth) {
+            newW = minWidth
+            diffXRotated = offsetWidth - minWidth
           }
+          newX += 0.5 * diffXRotated * cosFraction
+          newY += 0.5 * diffXRotated * sinFraction
           break
-
         case 'top':
-          newHeight = initialHeight - deltaY
-          newTop = initialTop + deltaY
-          if (newHeight < 0) {
-            newHeight = 0
-            newTop = initialTop + initialHeight
+          newH = offsetHeight - diffYRotated
+          if (newH < minHeight) {
+            newH = minHeight
+            diffYRotated = offsetHeight - minHeight
           }
+          newX -= 0.5 * diffYRotated * sinFraction
+          newY += 0.5 * diffYRotated * cosFraction
           break
         case 'top-left':
-          newWidth = initialWidth - deltaX
-          newHeight = initialHeight - deltaY
-          newLeft = initialLeft + deltaX
-          newTop = initialTop + deltaY
-          if (newWidth < 0) {
-            newWidth = 0
-            newLeft = initialLeft + initialWidth
+          newW = offsetWidth - diffXRotated
+          if (newW < minWidth) {
+            newW = minWidth
+            diffXRotated = offsetWidth - minWidth
           }
-          if (newHeight < 0) {
-            newHeight = 0
-            newTop = initialTop + initialHeight
+          newX += 0.5 * diffXRotated * cosFraction
+          newY += 0.5 * diffXRotated * sinFraction
+
+          newH = offsetHeight - diffYRotated
+          if (newH < minHeight) {
+            newH = minHeight
+            diffYRotated = offsetHeight - minHeight
           }
+          newX -= 0.5 * diffYRotated * sinFraction
+          newY += 0.5 * diffYRotated * cosFraction
+
           break
         case 'top-right':
-          newWidth = initialWidth + deltaX
-          newHeight = initialHeight - deltaY
-          newTop = initialTop + deltaY
-          if (newWidth < 0) newWidth = 0
-          if (newHeight < 0) {
-            newHeight = 0
-            newTop = initialTop + initialHeight
+          newW = offsetWidth + diffXRotated
+          if (newW < minWidth) {
+            newW = minWidth
+            diffXRotated = minWidth - offsetWidth
           }
+          newX += 0.5 * diffXRotated * cosFraction
+          newY += 0.5 * diffXRotated * sinFraction
+
+          newH = offsetHeight - diffYRotated
+          if (newH < minHeight) {
+            newH = minHeight
+            diffYRotated = offsetHeight - minHeight
+          }
+          newX -= 0.5 * diffYRotated * sinFraction
+          newY += 0.5 * diffYRotated * cosFraction
           break
         case 'bottom-left':
-          newHeight = initialHeight + deltaY
-          newWidth = initialWidth - deltaX
-          newLeft = initialLeft + deltaX
-          if (newWidth < 0) {
-            newWidth = 0
-            newLeft = initialLeft + initialWidth
+          newW = offsetWidth - diffXRotated
+          if (newW < minWidth) {
+            newW = minWidth
+            diffXRotated = offsetWidth - minWidth
           }
-          if (newHeight < 0) newHeight = 0
+          newX += 0.5 * diffXRotated * cosFraction
+          newY += 0.5 * diffXRotated * sinFraction
+
+          newH = offsetHeight + diffYRotated
+          if (newH < minHeight) {
+            newH = minHeight
+            diffYRotated = minHeight - offsetHeight
+          }
+
+          newX -= 0.5 * diffYRotated * sinFraction
+          newY += 0.5 * diffYRotated * cosFraction
+
           break
         case 'bottom-right':
-          newWidth = initialWidth + deltaX
-          newHeight = initialHeight + deltaY
-          if (newWidth < 0) newWidth = 0
-          if (newHeight < 0) newHeight = 0
+          newW = offsetWidth + diffXRotated
+          if (newW < minWidth) {
+            newW = minWidth
+
+            diffXRotated = minWidth - offsetWidth
+          }
+          newX += 0.5 * diffXRotated * cosFraction
+          newY += 0.5 * diffXRotated * sinFraction
+          newH = offsetHeight + diffYRotated
+          if (newH < minHeight) {
+            newH = minHeight
+            diffYRotated = minHeight - offsetHeight
+          }
+          newX -= 0.5 * diffYRotated * sinFraction
+          newY += 0.5 * diffYRotated * cosFraction
           break
+
         default:
           break
       }
 
-      updateSize({width: newWidth, height: newHeight, startX: newLeft, startY: newTop})
-    }
+      if (!ref.current || !refWrapper.current) return
+      const style = ref.current.style
+      const wrapperStyle = refWrapper.current.style
 
+      style.left = newX + 'px'
+      style.top = newY + 'px'
+      wrapperStyle.width = newW + 'px'
+      wrapperStyle.height = newH + 'px'
+    }
     const up = () => {
-      onUp && onUp()
       document.removeEventListener('mousemove', move)
       document.removeEventListener('mouseup', up)
     }
-
     document.addEventListener('mousemove', move)
     document.addEventListener('mouseup', up)
   }
-
-  const down = (e: React.MouseEvent, direction: ResizeDirection) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onDown && onDown()
-    handleResize(e.nativeEvent, direction)
-  }
-
-  return {ref, down} as const
+  return {ref, refWrapper, down}
 }
