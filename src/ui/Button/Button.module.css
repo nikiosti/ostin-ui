@@ -1,0 +1,42 @@
+.root {
+  --button-height: 30px;
+  --button-padding-x: 24px;
+  --button-bg: var(--ui-primary-color-filled);
+  --button-bg-hover: var(--ui-primary-color-filled-hover);
+  --button-color: var(--ui-color-black);
+  --button-border: none;
+  --button-radius: 14px;
+
+  cursor: pointer;
+  display: inline-block;
+  border-radius: var(--button-radius);
+  font-size: 18px;
+  background: var(--button-bg);
+  border: var(--button-border);
+  /* height: var(--button-height); */
+  padding: 6px var(--button-padding-x);
+  transform: scale(1);
+  transition: transform 0.1s ease-out, color 0.15s linear, -webkit-transform 0.1s ease-out;
+}
+
+.root[data-pressed='true'] {
+  transform: translateY(1px);
+
+  transition: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.root[data-hovered='true'] {
+  background: var(--button-bg-hover);
+}
+
+.root[data-disabled] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.label {
+  color: var(--button-color);
+  font-weight: 500;
+}

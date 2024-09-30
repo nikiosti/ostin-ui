@@ -1,0 +1,58 @@
+:root {
+  --ui-scale: 1;
+
+  --ui-color-white: #fff;
+  --ui-color-black: #000;
+
+  --ui-radius-default: calc(0.25rem * var(--ui-scale));
+  --ui-primary-color-0: var(--ui-color-blue-0);
+  --ui-primary-color-1: var(--ui-color-blue-1);
+  --ui-primary-color-2: var(--ui-color-blue-2);
+  --ui-primary-color-3: var(--ui-color-blue-3);
+  --ui-primary-color-4: var(--ui-color-blue-4);
+  --ui-primary-color-5: var(--ui-color-blue-5);
+  --ui-primary-color-6: var(--ui-color-blue-6);
+  --ui-primary-color-7: var(--ui-color-blue-7);
+  --ui-primary-color-8: var(--ui-color-blue-8);
+  --ui-primary-color-9: var(--ui-color-blue-9);
+
+  --ui-primary-color-filled: var(--ui-primary-color-4);
+  --ui-primary-color-filled-hover: var(--ui-primary-color-5);
+
+  --ui-primary-color-light: var(--ui-primary-color-1);
+  --ui-primary-color-light-hover: var(--ui-primary-color-2);
+
+  --ui-spacing-xs: calc(0.625rem * var(--ui-scale));
+  --ui-spacing-sm: calc(0.75rem * var(--ui-scale));
+  --ui-spacing-md: calc(1rem * var(--ui-scale));
+  --ui-spacing-lg: calc(1.25rem * var(--ui-scale));
+  --ui-spacing-xl: calc(2rem * var(--ui-scale));
+
+  --ui-radius-xs: calc(0.125rem * var(--ui-scale));
+  --ui-radius-sm: calc(0.25rem * var(--ui-scale));
+  --ui-radius-md: calc(0.5rem * var(--ui-scale));
+  --ui-radius-lg: calc(1rem * var(--ui-scale));
+  --ui-radius-xl: calc(2rem * var(--ui-scale));
+
+  --ui-color-gray-0: #f8f9fa;
+  --ui-color-gray-1: #f1f3f5;
+  --ui-color-gray-2: #e9ecef;
+  --ui-color-gray-3: #dee2e6;
+  --ui-color-gray-4: #ced4da;
+  --ui-color-gray-5: #adb5bd;
+  --ui-color-gray-6: #868e96;
+  --ui-color-gray-7: #495057;
+  --ui-color-gray-8: #343a40;
+  --ui-color-gray-9: #212529;
+
+  --ui-color-blue-0: #e7f5ff;
+  --ui-color-blue-1: #d0ebff;
+  --ui-color-blue-2: #a5d8ff;
+  --ui-color-blue-3: #74c0fc;
+  --ui-color-blue-4: #4dabf7;
+  --ui-color-blue-5: #339af0;
+  --ui-color-blue-6: #228be6;
+  --ui-color-blue-7: #1c7ed6;
+  --ui-color-blue-8: #1971c2;
+  --ui-color-blue-9: #1864ab;
+}

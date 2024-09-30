@@ -1,39 +1,13 @@
-import {Image} from './ui'
-import {useMove, useResizable, useRotate} from './hooks'
-import './App.css'
+import {Button} from './ui'
+
 const App = () => {
-  const {ref: refMove, down: downMove} = useMove()
-  const {ref: refRotate, refWrapper: refWrapperRotate, down: downRotate} = useRotate()
-  const {ref: refResize, refWrapper: refWrapperResize, down: downResize} = useResizable()
   return (
-    <div
-      className="box"
-      ref={(el) => {
-        refResize.current = el
-        refMove.current = el
-        refRotate.current = el
-      }}
-      onMouseDown={downMove}
-    >
-      <div
-        className="box-wrapper"
-        ref={(el) => {
-          refWrapperResize.current = el
-          refWrapperRotate.current = el
-        }}
-      >
-        <Image url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmCy16nhIbV3pI1qLYHMJKwbH2458oiC9EmA&s" />
-        <div className="dot rotate" onMouseDown={downRotate}></div>
-        <div className="dot left-top" onMouseDown={(e) => downResize(e, 'top-left')}></div>
-        <div className="dot left-bottom" onMouseDown={(e) => downResize(e, 'bottom-left')}></div>
-        <div className="dot top-mid" onMouseDown={(e) => downResize(e, 'top')}></div>
-        <div className="dot bottom-mid" onMouseDown={(e) => downResize(e, 'bottom')}></div>
-        <div className="dot left-mid" onMouseDown={(e) => downResize(e, 'left')}></div>
-        <div className="dot right-mid" onMouseDown={(e) => downResize(e, 'right')}></div>
-        <div className="dot right-bottom" onMouseDown={(e) => downResize(e, 'bottom-right')}></div>
-        <div className="dot right-top" onMouseDown={(e) => downResize(e, 'top-right')}></div>
-        <div className="rotate-link"></div>
-      </div>
+    <div style={{display: 'flex', gap: 16, alignItems: 'center', marginTop: 100, marginLeft: 100}}>
+      <Button variant="filled">filled</Button>
+      <Button variant="light">light</Button>
+      <Button variant="outline">outline</Button>
+      <Button variant="subtle">subtle</Button>
+      <Button variant="default">Сделать заказ</Button>
     </div>
   )
 }

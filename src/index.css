@@ -10,5 +10,21 @@ body {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+
+  height: 10000px;
 }
 
+button:focus-visible {
+  outline: 2px solid var(--ui-primary-color-filled);
+  outline-offset: calc(0.125rem * var(--ui-scale));
+}
+
+button {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+
+  cursor: pointer;
+}
