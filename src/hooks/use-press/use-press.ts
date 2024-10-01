@@ -1,4 +1,4 @@
-import {HTMLAttributes, KeyboardEvent, MouseEvent, useState} from 'react'
+import {HTMLAttributes, KeyboardEvent, MouseEvent, TouchEvent, useState} from 'react'
 import {ButtonProps} from '../../ui/Button/types'
 
 interface UsePressProps<T extends HTMLElement> {
@@ -13,16 +13,15 @@ interface UsePressResult<T extends HTMLElement> {
 
 export const usePress = <T extends HTMLElement>({ref, props}: UsePressProps<T>): UsePressResult<T> => {
   const [isPressed, setPressed] = useState<boolean>(false)
-  const pressDown = () => {
+  const down = () => {
     if (props?.disabled) return
 
     setPressed(true)
   }
 
-  const pressUp = () => {
+  const up = (e: MouseEvent<T> | KeyboardEvent<T> | TouchEvent<T>) => {
     if (props?.disabled) return
-    ref?.current?.focus()
-
+    if (e?.type !== 'mouseleave') ref?.current?.focus()
     setPressed(false)
   }
 
@@ -35,7 +34,7 @@ export const usePress = <T extends HTMLElement>({ref, props}: UsePressProps<T>):
     if (props?.disabled) return
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault()
-      pressDown()
+      down()
     }
   }
 
@@ -43,7 +42,7 @@ export const usePress = <T extends HTMLElement>({ref, props}: UsePressProps<T>):
     if (props?.disabled) return
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault()
-      pressUp()
+      up(e)
       click(e as unknown as React.MouseEvent<T>)
     }
   }
@@ -55,12 +54,12 @@ export const usePress = <T extends HTMLElement>({ref, props}: UsePressProps<T>):
       onClick: click,
       onKeyDown: keyDown,
       onKeyUp: keyUp,
-      onMouseDown: pressDown,
-      onMouseUp: pressUp,
-      onMouseLeave: pressUp,
-      onTouchStart: pressDown,
-      onTouchEnd: pressUp,
-      onTouchCancel: pressUp,
+      onMouseDown: down,
+      onMouseUp: up,
+      onMouseLeave: up,
+      onTouchStart: down,
+      onTouchEnd: up,
+      onTouchCancel: up,
     },
   }
 }

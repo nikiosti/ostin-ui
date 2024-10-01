@@ -5,4 +5,6 @@ import {Button} from './Button/Button'
 import {UnstyledButton} from './UnstyledButton/UnstyledButton'
 
 import {Box} from './Box/Box'
-export {Image, ResizableImage, Box, UnstyledButton, Button}
+
+import {Group} from './Group/Group'
+export {Image, ResizableImage, Box, UnstyledButton, Button, Group}

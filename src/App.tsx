@@ -1,14 +1,19 @@
-import {Button} from './ui'
+import {SparkleIcon, WalletIcon} from 'lucide-react'
+import {Button, Group} from './ui'
 
 const App = () => {
   return (
-    <div style={{display: 'flex', gap: 16, alignItems: 'center', marginTop: 100, marginLeft: 100}}>
-      <Button variant="filled">filled</Button>
-      <Button variant="light">light</Button>
-      <Button variant="outline">outline</Button>
+    <Group gap={8} wrap="wrap" justify="space-between">
+      <Button leftSection={<WalletIcon />} variant="filled">
+        Купить 129 990₽
+      </Button>
+      <Button variant="light">Заказать дизайн</Button>
+      <Button variant="outline">Заказать...</Button>
       <Button variant="subtle">subtle</Button>
-      <Button variant="default">Сделать заказ</Button>
-    </div>
+      <Button variant="default" leftSection={<SparkleIcon color="var(--ui-color-blue-5)" size={25} />}>
+        Cделать заказ
+      </Button>
+    </Group>
   )
 }
 

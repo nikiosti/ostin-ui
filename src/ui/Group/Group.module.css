@@ -1,0 +1,10 @@
+.group {
+  --group-gap: 4px;
+  --group-wrap: 'wrap';
+  --group-justify: 'start';
+
+  display: flex;
+  justify-content: var(--group-justify);
+  flex-wrap: var(--group-wrap);
+  gap: var(--group-gap);
+}

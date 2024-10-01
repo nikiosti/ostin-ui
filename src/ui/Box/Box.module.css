@@ -1,0 +1,8 @@
+.box {
+  --box-margin: 0px;
+  margin: var(--box-margin);
+  margin-left: var(--box-margin-left);
+  margin-right: var(--box-margin-right);
+  margin-top: var(--box-margin-top);
+  margin-bottom: var(--box-margin-bottom);
+}
