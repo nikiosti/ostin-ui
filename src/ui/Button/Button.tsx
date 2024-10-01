@@ -1,4 +1,4 @@
-import {FC, HTMLAttributes, useRef} from 'react'
+import {FC, HTMLAttributes, isValidElement, useRef} from 'react'
 import {useButton} from '../../hooks'
 import {ButtonCssVariables, ButtonProps} from './types'
 
@@ -9,7 +9,11 @@ import {Box} from '../Box/Box'
 const getVariantStyles = (variant: ButtonProps['variant']): ButtonCssVariables => {
   switch (variant) {
     case 'filled':
-      return {}
+      return {
+        '--button-bg': 'var(--ui-primary-color-filled)',
+        '--button-bg-hover': 'var(--ui-primary-color-filled-hover)',
+        '--button-color': 'var(--ui-color-white)',
+      }
     case 'light':
       return {
         '--button-bg': 'var(--ui-primary-color-light)',
@@ -41,9 +45,9 @@ const getVariantStyles = (variant: ButtonProps['variant']): ButtonCssVariables =
   }
 }
 
-export const Button: FC<HTMLAttributes<HTMLButtonElement> & ButtonProps> = (props) => {
+export const Button: FC<HTMLAttributes<HTMLButtonElement> & ButtonProps> = ({leftSection, ...props}) => {
   const ref = useRef<HTMLButtonElement | null>(null)
-  const {children, variant, style, className, leftSection, rightSection, color, bg, radius} = props
+  const {children, variant, style, className, rightSection, color, bg, radius} = props
 
   const variantStyles = getVariantStyles(variant)
   const buttonStyles: ButtonCssVariables = {
@@ -60,7 +64,7 @@ export const Button: FC<HTMLAttributes<HTMLButtonElement> & ButtonProps> = (prop
     <Box cn={className} s={style} {...props}>
       <button ref={ref} className={classes.root} style={buttonStyles} {...buttonProps}>
         {leftSection && <div className={classes.left}>{leftSection}</div>}
-        {typeof children === 'string' ? <span className={classes.label}>{children}</span> : children}
+        {isValidElement(children) ? children : <span className={classes.label}>{children}</span>}
         {rightSection && <div>{rightSection}</div>}
       </button>
     </Box>

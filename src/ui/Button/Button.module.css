@@ -1,10 +1,11 @@
 .root {
+  box-sizing: border-box;
   --button-padding-x: 24px;
   --button-bg: var(--ui-primary-color-filled);
   --button-bg-hover: var(--ui-primary-color-filled-hover);
   --button-color: var(--ui-color-black);
   --button-border: none;
-  --button-radius: 14px;
+  --button-radius: 3px;
   --button-gap: 8px;
 
   cursor: pointer;
@@ -15,16 +16,16 @@
   border-radius: var(--button-radius);
   font-size: 18px;
   background: var(--button-bg);
-  border: var(--button-border);
+  outline: var(--button-border);
+  outline-offset: -2px;
 
   padding: 6px var(--button-padding-x);
   transform: scale(1);
   transition: transform 0.1s ease-out, color 0.15s linear, -webkit-transform 0.1s ease-out;
-  transform: skew(-10deg);
 }
 
 .root[data-pressed='true'] {
-  transform: translateY(2px) skew(-10deg);
+  transform: translateY(2px);
 
   transition: none;
   user-select: none;
@@ -43,7 +44,6 @@
 .label {
   color: var(--button-color);
   font-weight: 500;
-  transform: skew(10deg);
 }
 
 .left {
