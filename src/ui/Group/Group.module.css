@@ -1,10 +1,12 @@
 .group {
   --group-gap: 4px;
-  --group-wrap: 'wrap';
-  --group-justify: 'start';
+  --group-wrap: wrap;
+  --group-justify: start;
+  --group-items: center;
 
   display: flex;
   justify-content: var(--group-justify);
+  align-items: var(--group-items);
   flex-wrap: var(--group-wrap);
   gap: var(--group-gap);
 }

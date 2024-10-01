@@ -3,15 +3,17 @@ import {Button, Group} from './ui'
 
 const App = () => {
   return (
-    <Group gap={8} wrap="wrap" justify="space-between">
-      <Button leftSection={<WalletIcon />} variant="filled">
-        Купить 129 990₽
+    <Group gap={8} wrap="wrap">
+      <Button leftSection={<WalletIcon color="var(--ui-color-white)" />} variant="filled">
+        Купить {222 + 444}₽
       </Button>
-      <Button variant="light">Заказать дизайн</Button>
-      <Button variant="outline">Заказать...</Button>
-      <Button variant="subtle">subtle</Button>
-      <Button variant="default" leftSection={<SparkleIcon color="var(--ui-color-blue-5)" size={25} />}>
+
+      <Button variant="default" leftSection={<SparkleIcon color="var(--ui-color-blue-5)" />}>
         Cделать заказ
+      </Button>
+
+      <Button variant="default" disabled>
+        Скоро
       </Button>
     </Group>
   )
